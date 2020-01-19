@@ -23,7 +23,7 @@ namespace Stroll.Models
         [Required]
         public int Type { get; set; }
 
-        [ForeignKey(nameof(Type)]
+        [ForeignKey(nameof(Type))]
         public UserType UserType { get; set; }
     }
 }

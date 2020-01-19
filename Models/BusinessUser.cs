@@ -10,8 +10,10 @@ namespace Stroll.Models
     public class BusinessUser
     {
         [Key]
-        public Guid BusinessId { get; set; }
-        [Key]
+        public Guid UID { get; set; }
+        [Required]
+        public Guid BusinessID { get; set; }
+        [Required]
         public Guid UserID { get; set; }
         [RegularExpression("[a-zA-Z]")]
         [MaxLength(50), MinLength(2)]
@@ -24,9 +26,9 @@ namespace Stroll.Models
         public string Phone { get; set; }
 
         // Navigation properties
-        [ForeignKey(nameof(BusinessId)]
+        [ForeignKey(nameof(BusinessID))]
         public Business Business { get; set; }
-        [ForeignKey(nameof(UserID)]
+        [ForeignKey(nameof(UserID))]
         public User User { get; set; }
     }
 }
