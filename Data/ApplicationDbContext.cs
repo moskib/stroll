@@ -19,7 +19,60 @@ namespace Stroll.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<UserType>().HasData(new UserType[]{
+                new UserType
+                {
+                    UID = 1,
+                    Type = "client"
+                },
+                new UserType
+                {
+                    UID = 2,
+                    Type = "business_employee"
+                },
+                new UserType
+                {
+                    UID = 3,
+                    Type = "business_admin"
+                }
+            }) ;
+
+            modelBuilder.Entity<AppointmentStatus>().HasData(new AppointmentStatus[]
+            {
+                new AppointmentStatus
+                {
+                    UID = 1,
+                    Status = "open"
+                },
+                new AppointmentStatus
+                {
+                    UID = 2,
+                    Status = "taken"
+                },
+                new AppointmentStatus
+                {
+                    UID = 3,
+                    Status = "cancelled"
+                }
+            });
+
+            //modelBuilder.Entity<User>().HasData(new User[]
+            //{
+            //    new User
+            //    {
+            //        UID = new System.Guid(),
+            //        Email = "client@text.com",
+            //        Password = "123456",
+            //        Type = 1
+            //    },
+            //    new User
+            //    {
+            //        UID = new System.Guid(),
+            //        Email = "business-admin@test.com",
+            //        Password = "123456",
+            //        Type = 3
+            //    }
+            //});
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
