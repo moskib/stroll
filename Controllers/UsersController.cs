@@ -26,14 +26,25 @@ namespace Stroll.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _unitOfWork.Users.GetAll();
+            try
+            {
+                var users = await _unitOfWork.Users.GetAllAsync();
+                return Ok(users);
+
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                // TODO: log exception
+                return StatusCode(500, "Internal server error");
+            }
         }
+        
 
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _unitOfWork.Users.GetAsync(id);
 
             if (user == null)
             {
@@ -44,8 +55,6 @@ namespace Stroll.Controllers
         }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(Guid id, User user)
         {
@@ -54,11 +63,11 @@ namespace Stroll.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _unitOfWork.Users.Update(user);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -76,13 +85,11 @@ namespace Stroll.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Users.Add(user);
+            await _unitOfWork.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.UID }, user);
         }
@@ -91,21 +98,21 @@ namespace Stroll.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _unitOfWork.Users.GetAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Users.Remove(user);
+            await _unitOfWork.SaveChangesAsync();
 
             return user;
         }
 
         private bool UserExists(Guid id)
         {
-            return _context.Users.Any(e => e.UID == id);
+            return _unitOfWork.Users.Exists(e => e.UID == id);
         }
     }
 }

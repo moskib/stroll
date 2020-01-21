@@ -9,15 +9,21 @@ namespace Stroll.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> Get(int id);
-        Task<TEntity> Get(Guid id);
-        Task<ActionResult<IEnumerable<TEntity>>> GetAll();
-        Task<ActionResult<IEnumerable<TEntity>>> Find(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> GetAsync(int id);
+        Task<TEntity> GetAsync(Guid id);
+        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 
         void Add(TEntity entity);
         void AddRange(IEnumerable<TEntity> entities);
 
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
+
+        void Update(TEntity entity);
+        void UpdateRange(IEnumerable<TEntity> entities);
+
+        bool Exists(Expression<Func<TEntity, bool>> predicate);
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }

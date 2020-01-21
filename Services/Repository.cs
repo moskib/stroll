@@ -18,6 +18,26 @@ namespace Stroll.Services
             Context = context;
         }
 
+        public async Task<TEntity> GetAsync(int id)
+        {
+            return await Context.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<TEntity> GetAsync(Guid id)
+        {
+            return await Context.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await Context.Set<TEntity>().ToListAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await Context.Set<TEntity>().Where(predicate).ToListAsync();
+        }
+
         public void Add(TEntity entity)
         {
             Context.Set<TEntity>().Add(entity);
@@ -26,26 +46,6 @@ namespace Stroll.Services
         public void AddRange(IEnumerable<TEntity> entities)
         {
             Context.Set<TEntity>().AddRange(entities);
-        }
-
-        public async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
-        {
-            return await Context.Set<TEntity>().Where(predicate).ToArrayAsync();
-        }
-
-        public async Task<TEntity> Get(int id)
-        {
-            return await Context.Set<TEntity>().FindAsync(id);
-        }
-
-        public async Task<TEntity> Get(Guid id)
-        {
-            return await Context.Set<TEntity>().FindAsync(id);
-        }
-
-        public async Task<ActionResult<IEnumerable<TEntity>>> GetAll()
-        {
-            return await Context.Set<TEntity>().ToArrayAsync();
         }
 
         public void Remove(TEntity entity)
@@ -57,5 +57,26 @@ namespace Stroll.Services
         {
             Context.Set<TEntity>().RemoveRange(entities);
         }
+
+        public void Update(TEntity entity)
+        {
+            Context.Set<TEntity>().Update(entity);
+        }
+
+        public void UpdateRange(IEnumerable<TEntity> entities)
+        {
+            Context.Set<TEntity>().UpdateRange(entities);
+        }
+
+        public bool Exists(Expression<Func<TEntity, bool>> predicate)
+        {
+            return Context.Set<TEntity>().Any(predicate);
+        }
+
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await Context.Set<TEntity>().AnyAsync(predicate);
+        }
+
     }
 }
