@@ -9,39 +9,52 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using Stroll.Services;
+using Stroll.Data;
+using Stroll.Enums;
 
 namespace Stroll.Controllers
 {
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthRepository _authRepo;
+        private readonly IUnitOfWork _repo;
         private readonly IConfiguration _config;
 
-        public AuthController(IAuthRepository authRepo, IConfiguration config)
+        public AuthController(ApplicationDbContext context, IConfiguration config)
         {
-            _authRepo = authRepo;
+            _repo = new UnitOfWork(context);
             _config = config;
         }
 
         [HttpPost("register")] // api/auth/register
         public async Task<ActionResult> Register([FromBody] UserForRegisterDto userForRegisterDto)
-        { 
+        {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (await _authRepo.UserExists(userForRegisterDto.Email))
+            if (await _repo.Auth.UserExists(userForRegisterDto.Email))
                 return BadRequest("Email already exists");
 
             var userToCreate = new User
             {
+                UID = Guid.NewGuid(),
                 Email = userForRegisterDto.Email,
                 Type = userForRegisterDto.Type
             };
 
             try
             {
-                await _authRepo.Register(userToCreate, userForRegisterDto.Password);
+                await _repo.Auth.Register(userToCreate, userForRegisterDto.Password);
+                if ((UserType)userForRegisterDto.Type == UserType.Client)
+                {
+                    await _repo.ClientUser.CreateClientUser(userForRegisterDto, userToCreate.UID);
+                }
+                else
+                {
+                    await _repo.BusinessUser.CreateBusinessUser(userForRegisterDto, userToCreate.UID);
+                }
+                await _repo.SaveChangesAsync();
                 return StatusCode(201);
             }
             catch (Exception ex)
@@ -60,7 +73,7 @@ namespace Stroll.Controllers
                 return BadRequest(ModelState);
 
             var userFromRepo =
-                await _authRepo.Login(userForLoginDto.Email, userForLoginDto.Password);
+                await _repo.Auth.Login(userForLoginDto.Email, userForLoginDto.Password);
 
             if (userFromRepo == null)
                 return Unauthorized();

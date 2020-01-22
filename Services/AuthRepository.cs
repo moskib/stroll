@@ -9,11 +9,11 @@ using System.Linq;
 
 namespace Stroll.Services
 {
-    public class AuthRepository : IAuthRepository
+    public class AuthRepository :Repository<User>, IAuthRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public AuthRepository(ApplicationDbContext context)
+        public AuthRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
@@ -54,7 +54,6 @@ namespace Stroll.Services
             user.PasswordSalt = passwordSalt;
 
             await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
 
             return user;
         }

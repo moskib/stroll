@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Stroll.Models
 {
-    public class UserType
+    public class Usertypes
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

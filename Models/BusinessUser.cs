@@ -11,8 +11,7 @@ namespace Stroll.Models
     {
         [Key]
         public Guid UID { get; set; }
-        [Required]
-        public Guid BusinessID { get; set; }
+        public Guid? BusinessID { get; set; }
         [Required]
         public Guid UserID { get; set; }
         [RegularExpression("[a-zA-Z]")]

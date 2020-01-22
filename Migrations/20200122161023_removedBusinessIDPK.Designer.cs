@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Stroll.Data;
@@ -9,9 +10,10 @@ using Stroll.Data;
 namespace Stroll.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200122161023_removedBusinessIDPK")]
+    partial class removedBusinessIDPK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +96,7 @@ namespace Stroll.Migrations
                         .HasColumnName("uid")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("BusinessID")
+                    b.Property<Guid>("BusinessID")
                         .HasColumnName("business_id")
                         .HasColumnType("uuid");
 
@@ -259,7 +261,9 @@ namespace Stroll.Migrations
                 {
                     b.HasOne("Stroll.Models.Business", "Business")
                         .WithMany()
-                        .HasForeignKey("BusinessID");
+                        .HasForeignKey("BusinessID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Stroll.Models.User", "User")
                         .WithMany()

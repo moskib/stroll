@@ -11,7 +11,7 @@ namespace Stroll.Data
         public DbSet<ClientUser> ClientUsers { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserType> UserTypes { get; set; }
+        public DbSet<Usertypes> UserTypes { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -19,18 +19,18 @@ namespace Stroll.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserType>().HasData(new UserType[]{
-                new UserType
+            modelBuilder.Entity<Usertypes>().HasData(new Usertypes[]{
+                new Usertypes
                 {
                     UID = 1,
                     Type = "client"
                 },
-                new UserType
+                new Usertypes
                 {
                     UID = 2,
                     Type = "business_employee"
                 },
-                new UserType
+                new Usertypes
                 {
                     UID = 3,
                     Type = "business_admin"

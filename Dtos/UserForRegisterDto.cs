@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stroll.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Stroll.Dtos
@@ -19,5 +20,14 @@ namespace Stroll.Dtos
         public string Password { get; set; }
         [Required]
         public int Type { get; set; }
+
+        [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+
+        [Required, Phone]
+        public string Phone { get; set; }
     }
 }
