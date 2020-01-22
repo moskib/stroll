@@ -38,6 +38,11 @@ namespace Stroll.Services
             return await Context.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity,bool>> predicate)
+        {
+            return await Context.Set<TEntity>().FirstOrDefaultAsync(predicate);
+        }
+
         public void Add(TEntity entity)
         {
             Context.Set<TEntity>().Add(entity);

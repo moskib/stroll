@@ -7,6 +7,7 @@ namespace Stroll.Interfaces
 {
     interface IUnitOfWork : IDisposable
     {
+        IAuthRepository Auth { get; }
         Task<int> SaveChangesAsync();
     }
 }

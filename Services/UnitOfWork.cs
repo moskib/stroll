@@ -15,9 +15,12 @@ namespace Stroll.Services
         {
             _context = context;
             Users = new Repository<User>(_context);
+            Auth = new AuthRepository(_context);
         }
 
         public IRepository<User> Users { get; private set; }
+
+        public IAuthRepository Auth { get; private set; }
 
         public void Dispose()
         {
