@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Stroll.Services
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext Context;
 
-        public Repository(DbContext context)
+        public BaseRepository(DbContext context)
         {
             Context = context;
         }
@@ -38,7 +38,7 @@ namespace Stroll.Services
             return await Context.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
-        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity,bool>> predicate)
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await Context.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }

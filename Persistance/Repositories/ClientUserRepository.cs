@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Stroll.Services
 {
-    public class ClientUserRepository : Repository<ClientUser>, IClientUserRepository
+    public class ClientUserRepository : BaseRepository<ClientUser>, IClientUserRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public ClientUserRepository(ApplicationDbContext context): base(context)
+        public ClientUserRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }

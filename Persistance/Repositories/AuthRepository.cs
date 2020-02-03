@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Stroll.Data;
+using System.Linq;
 using Stroll.Interfaces;
 using Stroll.Models;
-using System.Linq;
 
 namespace Stroll.Services
 {
-    public class AuthRepository :Repository<User>, IAuthRepository
+    public class AuthRepository : BaseRepository<User>, IAuthRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -25,7 +25,7 @@ namespace Stroll.Services
             if (user == null)
                 return null;
 
-            if(!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
             }
@@ -35,7 +35,7 @@ namespace Stroll.Services
 
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using(var hmac = new HMACSHA512(passwordSalt))
+            using (var hmac = new HMACSHA512(passwordSalt))
             {
                 var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
@@ -60,7 +60,7 @@ namespace Stroll.Services
 
         private void CreatePassowrdHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using(var hmac = new HMACSHA512())
+            using (var hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));

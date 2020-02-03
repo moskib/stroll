@@ -28,9 +28,8 @@ namespace Stroll
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Context"))
-            ) ;
+            );
 
-            // For every http request there will be a new instance of AuthRepository:
             services.AddScoped<IAuthRepository, AuthRepository>();
 
             var key =

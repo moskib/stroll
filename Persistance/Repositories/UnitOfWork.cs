@@ -14,13 +14,13 @@ namespace Stroll.Services
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
-            Users = new Repository<User>(_context);
+            Users = new BaseRepository<User>(_context);
             Auth = new AuthRepository(_context);
             BusinessUser = new BusinessUserRepository(_context);
             ClientUser = new ClientUserRepository(_context);
         }
 
-        public IRepository<User> Users { get; private set; }
+        public IBaseRepository<User> Users { get; private set; }
         public IAuthRepository Auth { get; private set; }
         public IBusinessUserRepository BusinessUser { get; private set; }
         public IClientUserRepository ClientUser { get; private set; }

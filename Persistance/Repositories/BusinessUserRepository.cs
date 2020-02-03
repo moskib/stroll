@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Stroll.Services
 {
-    public class BusinessUserRepository : Repository<BusinessUser>, IBusinessUserRepository
+    public class BusinessUserRepository : BaseRepository<BusinessUser>, IBusinessUserRepository
     {
-        public BusinessUserRepository(ApplicationDbContext context): base(context)
+        public BusinessUserRepository(ApplicationDbContext context) : base(context)
         {
         }
 

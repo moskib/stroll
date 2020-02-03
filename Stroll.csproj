@@ -22,8 +22,5 @@
     <Folder Include="Controllers\" />
     <Folder Include="Dtos\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Controllers\UsersController.cs" />
-  </ItemGroup>
+  
 </Project>

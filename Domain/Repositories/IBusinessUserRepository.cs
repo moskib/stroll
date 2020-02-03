@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Stroll.Interfaces
 {
-    public interface IBusinessUserRepository: IRepository<BusinessUser>
+    public interface IBusinessUserRepository : IBaseRepository<BusinessUser>
     {
         public Task<BusinessUser> CreateBusinessUser(UserForRegisterDto userInfo, Guid newUserID);
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Stroll.Interfaces
 {
-    public interface IClientUserRepository: IRepository<ClientUser>
+    public interface IClientUserRepository : IBaseRepository<ClientUser>
     {
         public Task<ClientUser> CreateClientUser(UserForRegisterDto userInfo, Guid newUserID);
     }
