@@ -9,8 +9,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using Stroll.Services;
-using Stroll.Data;
 using Stroll.Enums;
 
 namespace Stroll.Controllers
@@ -55,7 +53,7 @@ namespace Stroll.Controllers
                     await _unitOfWork.BusinessUser.CreateBusinessUser(userForRegisterDto, userToCreate.UID);
                 }
                 await _unitOfWork.SaveChangesAsync();
-                return StatusCode(201);
+                return StatusCode(201, "User created successfully");
             }
             catch (Exception ex)
             {
