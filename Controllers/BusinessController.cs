@@ -7,13 +7,13 @@ using Stroll.Services;
 namespace Stroll.Controllers
 {
     [Route("api/[controller]")]
-    public class BusinessController: ControllerBase
+    public class BusinessController : ControllerBase
     {
-        private readonly IUnitOfWork _repo;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public BusinessController(ApplicationDbContext context)
+        public BusinessController(UnitOfWork unitOfWork)
         {
-            _repo = new UnitOfWork(context);
+            _unitOfWork = unitOfWork;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stroll.Data;
 using Stroll.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,76 +12,81 @@ namespace Stroll.Services
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext Context;
+        protected readonly ApplicationDbContext _context;
 
-        public BaseRepository(DbContext context)
+        public BaseRepository(ApplicationDbContext context)
         {
-            Context = context;
+            _context = context;
         }
 
         public async Task<TEntity> GetAsync(int id)
         {
-            return await Context.Set<TEntity>().FindAsync(id);
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
         public async Task<TEntity> GetAsync(Guid id)
         {
-            return await Context.Set<TEntity>().FindAsync(id);
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await Context.Set<TEntity>().ToListAsync();
+            return await _context.Set<TEntity>().ToListAsync();
         }
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Context.Set<TEntity>().Where(predicate).ToListAsync();
+            return await _context.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Context.Set<TEntity>().FirstOrDefaultAsync(predicate);
+            return await _context.Set<TEntity>().FirstOrDefaultAsync(predicate);
+        }
+
+        public async Task AddAsync(TEntity entity)
+        {
+            await _context.Set<TEntity>().AddAsync(entity);
         }
 
         public void Add(TEntity entity)
         {
-            Context.Set<TEntity>().Add(entity);
+            _context.Set<TEntity>().Add(entity);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
-            Context.Set<TEntity>().AddRange(entities);
+            _context.Set<TEntity>().AddRange(entities);
         }
 
         public void Remove(TEntity entity)
         {
-            Context.Set<TEntity>().Remove(entity);
+            _context.Set<TEntity>().Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
-            Context.Set<TEntity>().RemoveRange(entities);
+            _context.Set<TEntity>().RemoveRange(entities);
         }
 
         public void Update(TEntity entity)
         {
-            Context.Set<TEntity>().Update(entity);
+            _context.Set<TEntity>().Update(entity);
         }
 
         public void UpdateRange(IEnumerable<TEntity> entities)
         {
-            Context.Set<TEntity>().UpdateRange(entities);
+            _context.Set<TEntity>().UpdateRange(entities);
         }
 
         public bool Exists(Expression<Func<TEntity, bool>> predicate)
         {
-            return Context.Set<TEntity>().Any(predicate);
+            return _context.Set<TEntity>().Any(predicate);
         }
 
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Context.Set<TEntity>().AnyAsync(predicate);
+            return await _context.Set<TEntity>().AnyAsync(predicate);
         }
 
     }

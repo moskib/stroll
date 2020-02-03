@@ -28,7 +28,7 @@ namespace Stroll.Services
                 Phone = userInfo.Phone
             };
 
-            await _context.AddAsync(newClientUser);
+            await AddAsync(newClientUser);
 
             return newClientUser;
         }

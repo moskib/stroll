@@ -15,11 +15,6 @@ namespace Stroll.Services
         {
         }
 
-        public ApplicationDbContext context
-        {
-            get { return Context as ApplicationDbContext; }
-        }
-
         public async Task<BusinessUser> CreateBusinessUser(UserForRegisterDto userInfo, Guid newUserID)
         {
 
@@ -32,7 +27,7 @@ namespace Stroll.Services
                 Phone = userInfo.Phone,
             };
 
-            await context.BusinessUsers.AddAsync(newBusinessUser);
+            await AddAsync(newBusinessUser);
 
             return newBusinessUser;
         }

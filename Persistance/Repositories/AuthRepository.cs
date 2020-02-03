@@ -11,11 +11,9 @@ namespace Stroll.Services
 {
     public class AuthRepository : BaseRepository<User>, IAuthRepository
     {
-        private readonly ApplicationDbContext _context;
 
         public AuthRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task<User> Login(string userEmail, string password)

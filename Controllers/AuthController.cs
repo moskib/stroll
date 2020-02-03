@@ -18,12 +18,12 @@ namespace Stroll.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IUnitOfWork _repo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
 
-        public AuthController(ApplicationDbContext context, IConfiguration config)
+        public AuthController(IUnitOfWork unitOfWork, IConfiguration config)
         {
-            _repo = new UnitOfWork(context);
+            _unitOfWork = unitOfWork;
             _config = config;
         }
 
@@ -33,7 +33,7 @@ namespace Stroll.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (await _repo.Auth.UserExists(userForRegisterDto.Email))
+            if (await _unitOfWork.Auth.UserExists(userForRegisterDto.Email))
                 return BadRequest("Email already exists");
 
             var userToCreate = new User
@@ -45,16 +45,16 @@ namespace Stroll.Controllers
 
             try
             {
-                await _repo.Auth.Register(userToCreate, userForRegisterDto.Password);
+                await _unitOfWork.Auth.Register(userToCreate, userForRegisterDto.Password);
                 if ((UserType)userForRegisterDto.Type == UserType.Client)
                 {
-                    await _repo.ClientUser.CreateClientUser(userForRegisterDto, userToCreate.UID);
+                    await _unitOfWork.ClientUser.CreateClientUser(userForRegisterDto, userToCreate.UID);
                 }
                 else
                 {
-                    await _repo.BusinessUser.CreateBusinessUser(userForRegisterDto, userToCreate.UID);
+                    await _unitOfWork.BusinessUser.CreateBusinessUser(userForRegisterDto, userToCreate.UID);
                 }
-                await _repo.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
                 return StatusCode(201);
             }
             catch (Exception ex)
@@ -66,14 +66,14 @@ namespace Stroll.Controllers
 
         }
 
-        [HttpPost("login")]
+        [HttpPost("login")] // api/auth/login
         public async Task<ActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var userFromRepo =
-                await _repo.Auth.Login(userForLoginDto.Email, userForLoginDto.Password);
+                await _unitOfWork.Auth.Login(userForLoginDto.Email, userForLoginDto.Password);
 
             if (userFromRepo == null)
                 return Unauthorized();

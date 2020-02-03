@@ -30,7 +30,7 @@ namespace Stroll
                 options.UseNpgsql(Configuration.GetConnectionString("Context"))
             );
 
-            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var key =
                 Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
